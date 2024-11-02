@@ -1,4 +1,4 @@
-package ph.salmon.test
+package ph.salmon.test.models
 
 data class Post(
     val id: Int,
