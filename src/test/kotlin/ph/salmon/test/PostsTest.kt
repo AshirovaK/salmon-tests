@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class PostsTest: BaseApiTest() {
+class PostsTest : BaseApiTest() {
 
     private val urlSuffix = "/posts"
     private val allureFilter = AllureRestAssured()
@@ -28,20 +28,26 @@ class PostsTest: BaseApiTest() {
     @AllureId("some generated id")
     @Issue("some issue/task id")
     fun `get a post`() {
-        val expectedPost = Post(
-            id = 1,
-            userId = 1,
-            title = "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-            body = "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\n" +
-                    "nostrum rerum est autem sunt rem eveniet architecto"
-        )
+// Builder зачем нужен. Если есть сеттеры
+        // генераторы данных
+        val expectedPostJava = PostJava()
+        val expectedPost = PostBuilder().setId(1).setUserId(1)
+            .setTitle("sunt aut facere repellat provident occaecati excepturi optio reprehenderit")
+            .setBody("quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit " +
+                    "molestiae ut ut quas totam\n" + "nostrum rerum est autem sunt rem eveniet architecto")
+
+        //Захордкожен сервис работы с запросами
         val actualResponse = RestAssured
             .get("/1")
             .then()
             .extract()
             .body()
             .`as`(Post::class.java)
+        //сделать soft assert
         assertThat(actualResponse, equalTo(expectedPost))
+
+        //очищение окружения
+        //круд интерфейс для сервиса по отправке постов
     }
 
     @Test
@@ -141,10 +147,10 @@ class PostsTest: BaseApiTest() {
     @Test
     @AllureId("some generated id")
     @Issue("some issue/task id")
-    /**
-     * Можно поиграться с аллюром, чтобы иметь в итоге в отчете структуру шагов по схеме GIVEN-WHEN-THEN
-     * Привел для примера, все тесты уж не стал так делать)
-     */
+            /**
+             * Можно поиграться с аллюром, чтобы иметь в итоге в отчете структуру шагов по схеме GIVEN-WHEN-THEN
+             * Привел для примера, все тесты уж не стал так делать)
+             */
     fun `posts amount assertion with step annotation`() {
         lateinit var response: List<Post>
         WHEN("request posts") {
