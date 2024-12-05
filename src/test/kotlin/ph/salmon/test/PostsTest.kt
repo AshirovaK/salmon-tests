@@ -10,6 +10,7 @@ import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import ph.salmon.test.models.Post
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PostsTest : BaseApiTest() {
@@ -30,12 +31,13 @@ class PostsTest : BaseApiTest() {
     fun `get a post`() {
 // Builder зачем нужен. Если есть сеттеры
         // генераторы данных
-        val expectedPostJava = PostJava()
-        val expectedPost = PostBuilder().setId(1).setUserId(1)
-            .setTitle("sunt aut facere repellat provident occaecati excepturi optio reprehenderit")
-            .setBody("quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit " +
-                    "molestiae ut ut quas totam\n" + "nostrum rerum est autem sunt rem eveniet architecto")
-
+        val expectedPost = Post.Builder().id(1).userId(1)
+            .title("sunt aut facere repellat provident occaecati excepturi optio reprehenderit")
+            .body(
+                "quia et suscipit\nsuscipit recusandae consequuntur expedita " +
+                        "et cum\nreprehenderit molestiae ut ut quas totam\n"
+                        + "nostrum rerum est autem sunt rem eveniet architecto"
+            ).build()
         //Захордкожен сервис работы с запросами
         val actualResponse = RestAssured
             .get("/1")
@@ -67,7 +69,7 @@ class PostsTest : BaseApiTest() {
     @AllureId("some generated id")
     @Issue("some issue/task id")
     fun `create a post`() {
-        val expectedPost = Post(101, 1, "foo", "bar")
+        val expectedPost = Post.Builder().id(101).userId(1).title("foo").body("bar")
         val actualPost = RestAssured
             .given()
             .contentType(ContentType.JSON)
@@ -87,7 +89,7 @@ class PostsTest : BaseApiTest() {
     @AllureId("some generated id")
     @Issue("some issue/task id")
     fun `update a post`() {
-        val expectedPost = Post(1, 1, "1", "1")
+        val expectedPost = Post.Builder().id(1).userId(1).title("1").body("1")
         val actualPost = RestAssured
             .given()
             .contentType(ContentType.JSON)
