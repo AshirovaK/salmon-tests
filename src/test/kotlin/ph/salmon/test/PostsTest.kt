@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import ph.salmon.test.models.Post
+import ph.salmon.test.webservices.PostService
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PostsTest : BaseApiTest() {
@@ -39,6 +40,7 @@ class PostsTest : BaseApiTest() {
                         + "nostrum rerum est autem sunt rem eveniet architecto"
             ).build()
         //Захордкожен сервис работы с запросами
+        val actualResponse1 = PostService().read(expectedPost.id);
         val actualResponse = RestAssured
             .get("/1")
             .then()
