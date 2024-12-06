@@ -23,6 +23,8 @@ dependencies {
     testImplementation("io.qameta.allure:allure-junit5:2.29.0")
 }
 
+//apply(from = "src/main/java/java-config.gradle")
+
 tasks.test {
     useJUnitPlatform()
     testLogging {
